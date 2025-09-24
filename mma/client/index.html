@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UFC Fighters Directory</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+  <link rel="stylesheet" href="/src/style.css">
+  </head>
+  <body>
+    <header class="container">
+      <h1>UFC Fighters Directory</h1>
+      <p>Browse elite fighters. Search by name or open details.</p>
+    </header>
+    <main class="container">
+      <form id="list-controls" class="grid controls-bar" autocomplete="off">
+        <input type="search" id="search" placeholder="Search fighters by name..." aria-label="Search fighters" />
+      </form>
+      <section id="fighters-grid" class="grid"></section>
+    </main>
+    <script src="/src/list.js"></script>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+/* Minimal enhancements layered on PicoCSS */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+article.card img, article img {
+  width: 100%;
+  height: auto;
+  border-radius: .35rem;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  background: #111;
+}
+
+.controls-bar { margin-bottom: 1rem; }
+.controls-bar.narrow { max-width: 400px; }
+
+#content { margin-bottom: 2rem; }
+
+ul { list-style: none; padding-left: 0; }
+ul li { margin: 0 .25rem .25rem 0; }
+
+@media (min-width: 900px) {
+  article.card { display: flex; flex-direction: column; }
+}

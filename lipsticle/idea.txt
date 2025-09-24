@@ -1,5 +1,0 @@
-This is a simple project which were the user will get to scower through a list of problem types for leetcode problem
-the user will then have the chance to click a problem in leetcode and get a list of similar problems to solve
-The user will also be able to see the difficulty of the problem and the acceptance rate of the problem
-There will be two things, one if the user wants they can click on the problem hyperlink which will teleport them to the leetcode page
-or the second option is the user can solve them problem while looking on the HTML page that I have rendered in the browser
