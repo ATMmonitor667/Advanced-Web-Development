@@ -1,16 +1,85 @@
 import express from "express";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
+import database from "./utils/Database.js";
+import path from "path";
+import { fileURLToPath } from "url";
+import cors from "cors";
 
-dotenv.config({})
+// ES module path resolution
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+dotenv.config({});
 
 const app = express();
-//app.use(express.static("",))
 
-const PORT = process.env.PORT || 3000;
+// Enable CORS
+app.use(cors());
 
+// Parse JSON bodies
+app.use(express.json());
 
-app.listen(PORT, (req, res)=>
-{
-  console.log(`The server is running on port: ${PORT}`)
-})
+// Serve static files from client directory
+const clientPath = path.join(__dirname, '../client');
+app.use(express.static(clientPath));
+
+const PORT = process.env.PORT || 5000;
+
+// API routes
+app.get('/api', async (req, res) => {
+  try {
+    const result = await database.query('SELECT * FROM demonslayer ORDER BY power DESC');
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({ error: 'Failed to fetch characters' });
+  }
+});
+
+app.get('/api/name/:name', async (req, res) => {
+  try {
+    const { name } = req.params;
+    const result = await database.query(
+      'SELECT * FROM demonslayer WHERE LOWER(name) = LOWER($1)', 
+      [name]
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({ error: 'Failed to fetch character' });
+  }
+});
+
+// HTML routes
+app.get('/', (req, res) => {
+  res.sendFile(path.join(clientPath, 'index.html'));
+});
+
+app.get('/characters/:name', (req, res) => {
+  res.sendFile(path.join(clientPath, 'character.html'));
+});
+
+// 404 handler for API routes
+app.use('/api', (req, res) => {
+  res.status(404).json({ error: 'API endpoint not found' });
+});
+
+// 404 handler for all other routes
+app.use((req, res) => {
+  res.status(404).sendFile(path.join(clientPath, '404.html'));
+});
+
+async function testConnection() {
+  try {
+    const result = await database.query('SELECT * FROM demonslayer');
+    console.log(`Connected to database. Found ${result.rows.length} characters.`);
+  } catch (error) {
+    console.error('Database connection error:', error);
+  }
+}
+
+testConnection();
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port: ${PORT}`);
+});
