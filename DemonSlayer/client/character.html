@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="character-name">Character Details</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css">
+  <link rel="stylesheet" href="../src/style.css">
+</head>
+<body>
+  <header class="container">
+    <nav>
+      <ul>
+        <li><h1>🗡️ Demon Slayer Characters</h1></li>
+      </ul>
+      <ul>
+        <li><a href="/">Home</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section>
+      <form>
+        <fieldset role="group">
+          <input 
+            type="search" 
+            id="search" 
+            name="search" 
+            placeholder="Search characters..." 
+            aria-label="Search characters"
+          >
+          <input type="submit" value="Search">
+        </fieldset>
+      </form>
+    </section>
+
+    <section id="detail-container">
+      <div id="loading">
+        <p>Loading character details...</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container">
+    <small>
+      <a href="#">Privacy Policy</a> • 
+      <a href="#">Terms of Service</a>
+    </small>
+  </footer>
+
+  <script src="../src/character.js"></script>
+</body>
+</html>

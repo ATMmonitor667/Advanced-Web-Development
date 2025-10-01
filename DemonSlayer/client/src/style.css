@@ -1,96 +1,134 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+/* Demon Slayer Characters - Custom Styles */
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Grid layout for character cards */
+.characters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+/* Individual character card styling */
+.character-card {
+  border: 1px solid var(--pico-card-border-color);
+  border-radius: var(--pico-border-radius);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  background: var(--pico-card-background-color);
 }
 
-body {
+.character-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.character-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.character-card header,
+.character-card footer {
+  padding: 1rem;
+}
+
+.character-card header h3 {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  color: var(--pico-primary-color);
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.character-card .stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
 }
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
+.character-card .stat {
+  font-size: 0.9rem;
+  color: var(--pico-muted-color);
+}
+
+.character-card .breathing {
+  background: var(--pico-primary-background);
+  color: var(--pico-primary-color);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--pico-border-radius);
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-top: 0.5rem;
+  display: inline-block;
+}
+
+/* Loading state */
+#loading {
+  text-align: center;
   padding: 2rem;
+  color: var(--pico-muted-color);
+}
+
+/* Detail page specific styles */
+.character-detail img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--pico-border-radius);
+  margin-bottom: 1rem;
+}
+
+.character-detail .attributes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.character-detail .attribute {
+  background: var(--pico-card-background-color);
+  padding: 1rem;
+  border-radius: var(--pico-border-radius);
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vanilla:hover {
-  filter: drop-shadow(0 0 2em #f7df1eaa);
+.character-detail .attribute-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--pico-primary-color);
 }
 
-.card {
-  padding: 2em;
+.character-detail .attribute-label {
+  font-size: 0.9rem;
+  color: var(--pico-muted-color);
+  margin-top: 0.25rem;
 }
 
-.read-the-docs {
-  color: #888;
+/* 404 page styles */
+.error-page {
+  text-align: center;
+  padding: 4rem 0;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .characters-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
-  a:hover {
-    color: #747bff;
+  
+  .character-detail .attributes {
+    grid-template-columns: 1fr;
   }
-  button {
-    background-color: #f9f9f9;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .character-card {
+    border-color: var(--pico-card-border-color);
+  }
+  
+  .character-card:hover {
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
   }
 }
