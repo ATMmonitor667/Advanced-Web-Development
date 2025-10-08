@@ -39,29 +39,29 @@ app.get('/api', async (req, res) => {
 app.get('/api/search', async (req, res) => {
   try {
     const { attribute, operator, value, query } = req.query;
-    
+
     let sql = 'SELECT * FROM demonslayer WHERE 1=1';
     let params = [];
-    
+
     if (query) {
       // General text search
       sql += ` AND (LOWER(name) LIKE $${params.length + 1} OR LOWER(breathing) LIKE $${params.length + 1})`;
       params.push(`%${query.toLowerCase()}%`);
     }
-    
+
     if (attribute && operator && value) {
       // Specific attribute search
       const validAttributes = ['power', 'speed', 'durability', 'intelligence'];
       const validOperators = ['>', '<', '>=', '<=', '='];
-      
+
       if (validAttributes.includes(attribute) && validOperators.includes(operator)) {
         sql += ` AND ${attribute} ${operator} $${params.length + 1}`;
         params.push(parseInt(value));
       }
     }
-    
+
     sql += ' ORDER BY power DESC';
-    
+
     const result = await database.query(sql, params);
     res.json(result.rows);
   } catch (error) {
@@ -74,7 +74,7 @@ app.get('/api/name/:name', async (req, res) => {
   try {
     const { name } = req.params;
     const result = await database.query(
-      'SELECT * FROM demonslayer WHERE LOWER(name) = LOWER($1)', 
+      'SELECT * FROM demonslayer WHERE LOWER(name) = LOWER($1)',
       [name]
     );
     res.json(result.rows);

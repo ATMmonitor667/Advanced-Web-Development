@@ -1,0 +1,141 @@
+.event-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  border-left: 4px solid #667eea;
+}
+
+.event-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.event-card.past-event {
+  opacity: 0.7;
+  border-left-color: #999;
+  background: #f5f5f5;
+}
+
+.event-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.event-card-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+  flex: 1;
+}
+
+.event-universe-badge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-left: 1rem;
+  white-space: nowrap;
+}
+
+.event-card.past-event .event-universe-badge {
+  background: #999;
+}
+
+.event-card-description {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
+
+.event-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 1rem;
+}
+
+.event-time {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.event-time-icon {
+  color: #667eea;
+  font-weight: 700;
+}
+
+.event-card.past-event .event-time-icon {
+  color: #999;
+}
+
+.event-countdown {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.countdown-label {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  margin-bottom: 0.25rem;
+}
+
+.countdown-time {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.event-past-label {
+  background: #999;
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.event-location-link {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: color 0.3s ease;
+}
+
+.event-location-link:hover {
+  color: #764ba2;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .event-card-header {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .event-universe-badge {
+    margin-left: 0;
+  }
+
+  .event-card-title {
+    font-size: 1.15rem;
+  }
+}
