@@ -4,6 +4,7 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import router from './routes/routes.js';
+import { checkDatabaseConnection } from './config/database.js';
 
 // ES module path resolution
 const __filename = fileURLToPath(import.meta.url);
@@ -32,6 +33,10 @@ app.use((req, res) => {
   res.sendFile(path.join(clientPath, 'index.html'));
 });
 
-app.listen(PORT, () => {
+// Start server and check database connection
+app.listen(PORT, async () => {
   console.log(`🚀 Server is running on port ${PORT}`);
+  console.log(`📍 API available at http://localhost:${PORT}/api`);
+  console.log('\n🔍 Checking database connection...');
+  await checkDatabaseConnection();
 });
