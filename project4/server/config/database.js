@@ -11,7 +11,7 @@ const config = {
   host: process.env.PGHOST,
   port: process.env.PGPORT,
   database: process.env.PGDATABASE,
-  // Only use SSL for production databases (like Render, Railway)
+  
   ...(isProduction && {
     ssl: {
       rejectUnauthorized: false
