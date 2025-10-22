@@ -20,35 +20,35 @@ async function load(name){
     container.innerHTML = '<p>No character name provided.</p><p><a href="/" role="button">Back</a></p>';
     return;
   }
-  
+
   container.innerHTML = '<p>Loading...</p>';
-  
+
   try {
     const res = await fetch(`/api/name/${encodeURIComponent(name)}`);
     console.log('API response status:', res.status); // Debug log
-    
+
     if(!res.ok){
       container.innerHTML = '<p>Character not found.</p><p><a href="/" role="button">Back</a></p>';
       return;
     }
-    
+
     const data = await res.json();
     console.log('API response data:', data); // Debug log
-    
+
     if(!data.length){
       container.innerHTML = '<p>Character not found.</p><p><a href="/" role="button">Back</a></p>';
       return;
     }
-    
+
     const character = data[0];
     titleEl.textContent = character.name;
     const characterName = character.name;
-    
+
     container.innerHTML = `
       <article class="character-detail">
         <header><h2>${characterName}</h2></header>
         <img src="${character.image_url || placeholder(characterName)}" alt="${characterName}" />
-        
+
         <section>
           <h4>Character Attributes</h4>
           <div class="attributes">
@@ -70,13 +70,13 @@ async function load(name){
             </div>
           </div>
         </section>
-        
+
         <section>
           <h4>Breathing Technique</h4>
           <p><strong>${character.breathing}</strong></p>
           <p>This character specializes in the art of ${character.breathing}, demonstrating exceptional mastery in the Demon Slayer universe.</p>
         </section>
-        
+
         <p><a href="/" role="button" class="secondary">Back to Character List</a></p>
       </article>
     `;

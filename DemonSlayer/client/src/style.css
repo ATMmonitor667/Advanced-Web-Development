@@ -116,7 +116,7 @@
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   .character-detail .attributes {
     grid-template-columns: 1fr;
   }
@@ -127,7 +127,7 @@
   .character-card {
     border-color: var(--pico-card-border-color);
   }
-  
+
   .character-card:hover {
     box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
   }
