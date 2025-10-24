@@ -1,42 +1,46 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import router from './routes/routes.js';
-import { checkDatabaseConnection } from './config/database.js';
+import express from 'express'
+import path from 'path'
+import favicon from 'serve-favicon'
+import dotenv from 'dotenv'
+import cors from 'cors'
+import { checkDatabaseConnection } from './database.js'
+import customItemsRouter from './routes/customItems.js'
+import optionsRouter from './routes/options.js'
 
-// ES module path resolution
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
-dotenv.config();
+dotenv.config()
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000
 
-// Enable CORS
-app.use(cors());
+const app = express()
 
-// Parse JSON bodies
-app.use(express.json());
-
-// Serve static files from client/dist directory
-const clientPath = path.join(__dirname, '../client/dist');
-app.use(express.static(clientPath));
+app.use(express.json())
+app.use(cors())
 
 // API routes
-app.use('/api', router);
+app.use('/api/custom-items', customItemsRouter)
+app.use('/api/options', optionsRouter)
 
-// SPA fallback - serve index.html for all non-API routes
-app.use((req, res) => {
-  res.sendFile(path.join(clientPath, 'index.html'));
-});
+if (process.env.NODE_ENV === 'development') {
+    app.use(favicon(path.resolve('../', 'client', 'public', 'lightning.png')))
+}
+else if (process.env.NODE_ENV === 'production') {
+    app.use(favicon(path.resolve('public', 'lightning.png')))
+    app.use(express.static('public'))
+}
 
-// Start server and check database connection
-app.listen(PORT, async () => {
-  console.log(`🚀 Server is running on port ${PORT}`);
-  console.log(`📍 API available at http://localhost:${PORT}/api`);
-  console.log('\n🔍 Checking database connection...');
-  await checkDatabaseConnection();
-});
+// specify the api path for the server to use
+
+
+if (process.env.NODE_ENV === 'production') {
+    app.get('/*', (_, res) =>
+        res.sendFile(path.resolve('public', 'index.html'))
+    )
+}
+
+// Check database connection on startup
+checkDatabaseConnection()
+
+app.listen(PORT, () => {
+    console.log(`server listening on http://localhost:${PORT}`)
+})

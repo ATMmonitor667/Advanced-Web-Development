@@ -1,28 +1,17 @@
-// Base price of the car
-const BASE_PRICE = 40000;
+// Calculate total price from selections
+export const calculateTotalPrice = (selections) => {
+  if (!selections || selections.length === 0) return 0
 
-// Calculate total price based on selected options
-export const calculateTotalPrice = (exterior, roof, wheels, interior) => {
-  const exteriorPrice = exterior?.price || 0;
-  const roofPrice = roof?.price || 0;
-  const wheelsPrice = wheels?.price || 0;
-  const interiorPrice = interior?.price || 0;
+  return selections.reduce((total, selection) => {
+    return total + (parseFloat(selection.price) || 0)
+  }, 0)
+}
 
-  return BASE_PRICE + exteriorPrice + roofPrice + wheelsPrice + interiorPrice;
-};
-
-// Format price as currency
+// Format price for display
 export const formatPrice = (price) => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(price);
-};
-
-export default {
-  calculateTotalPrice,
-  formatPrice,
-  BASE_PRICE
-};
+    minimumFractionDigits: 2,
+  }).format(price)
+}

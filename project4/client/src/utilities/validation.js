@@ -1,34 +1,50 @@
-// Validate that the selected combination is valid
-export const validateCarConfiguration = (exterior, roof, wheels, interior) => {
-  const errors = [];
+// Validate incompatible option combinations
+export const validateSelections = (selections) => {
+  const errors = []
 
-  // Check if all required fields are selected
-  if (!exterior) errors.push('Please select an exterior color');
-  if (!roof) errors.push('Please select a roof type');
-  if (!wheels) errors.push('Please select wheels');
-  if (!interior) errors.push('Please select an interior');
+  // Get option IDs from selections
+  const optionIds = selections.map(s => s.option_id)
 
-  // Check for incompatible combinations
-  // Convertible roofs cannot have sunroof options
-  if (roof && roof.convertible && (roof.type === 'sunroof' || roof.type === 'panoramic')) {
-    errors.push('Invalid combination: Convertible roofs cannot have sunroof options');
+  // Rule 1: Electric engine (ID 13) cannot have sport wheels (ID 6)
+  if (optionIds.includes(13) && optionIds.includes(6)) {
+    errors.push('Electric engine is not compatible with sport wheels')
   }
+
+  // Rule 2: All features must have a selection
+  const requiredFeatures = [1, 2, 3, 4] // Exterior, Wheels, Interior, Engine
+  const selectedFeatures = [...new Set(selections.map(s => s.feature_id))]
+
+  requiredFeatures.forEach(featureId => {
+    if (!selectedFeatures.includes(featureId)) {
+      const featureNames = {
+        1: 'Exterior Color',
+        2: 'Wheels',
+        3: 'Interior',
+        4: 'Engine'
+      }
+      errors.push(`Please select ${featureNames[featureId]}`)
+    }
+  })
 
   return {
     isValid: errors.length === 0,
     errors
-  };
-};
-
-// Check if a specific combination is incompatible
-export const isIncompatibleCombination = (roof) => {
-  if (roof && roof.convertible && (roof.id === 2 || roof.id === 3)) {
-    return true;
   }
-  return false;
-};
+}
 
-export default {
-  validateCarConfiguration,
-  isIncompatibleCombination
-};
+// Validate car name
+export const validateCarName = (name) => {
+  if (!name || name.trim().length === 0) {
+    return { isValid: false, error: 'Car name is required' }
+  }
+
+  if (name.length < 3) {
+    return { isValid: false, error: 'Car name must be at least 3 characters' }
+  }
+
+  if (name.length > 50) {
+    return { isValid: false, error: 'Car name must be less than 50 characters' }
+  }
+
+  return { isValid: true }
+}

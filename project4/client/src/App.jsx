@@ -1,39 +1,41 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import CreateCar from './pages/CreateCar';
-import ViewCar from './pages/ViewCar';
-import EditCar from './pages/EditCar';
-import AllCars from './pages/AllCars';
-import './App.css';
+import React from 'react'
+import { useRoutes } from 'react-router-dom'
+import Navigation from './components/Navigation'
+import ViewCars from './pages/ViewCars'
+import EditCar from './pages/EditCar'
+import CreateCar from './pages/CreateCar'
+import CarDetails from './pages/CarDetails'
+import './App.css'
 
-function App() {
+const App = () => {
+  let element = useRoutes([
+    {
+      path: '/',
+      element: <CreateCar title='BOLT BUCKET | Customize' />
+    },
+    {
+      path:'/customcars',
+      element: <ViewCars title='BOLT BUCKET | Custom Cars' />
+    },
+    {
+      path: '/customcars/:id',
+      element: <CarDetails title='BOLT BUCKET | View' />
+    },
+    {
+      path: '/edit/:id',
+      element: <EditCar title='BOLT BUCKET | Edit' />
+    }
+  ])
+
   return (
-    <Router>
-      <div className="app">
-        <nav className="navbar">
-          <div className="nav-container">
-            <Link to="/" className="nav-logo">
-              🚗 DIY Delight
-            </Link>
-            <ul className="nav-menu">
-              <li className="nav-item">
-                <Link to="/" className="nav-link">Create Car</Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/customcars" className="nav-link">My Garage</Link>
-              </li>
-            </ul>
-          </div>
-        </nav>
+    <div className='app'>
 
-        <Routes>
-          <Route path="/" element={<CreateCar />} />
-          <Route path="/customcars" element={<AllCars />} />
-          <Route path="/customcars/:id" element={<ViewCar />} />
-          <Route path="/edit/:id" element={<EditCar />} />
-        </Routes>
-      </div>
-    </Router>
-  );
+      <Navigation />
+
+      { element }
+
+    </div>
+  )
 }
 
-export default App;
+export default App
