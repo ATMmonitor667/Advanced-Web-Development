@@ -2,7 +2,7 @@
 
 **Team Members:**
 - ATM Rahat Hossain
-- [Partner Name]
+- Kevin Zheng
 
 ---
 
