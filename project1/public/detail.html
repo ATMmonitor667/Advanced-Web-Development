@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Character Profile | Demon Slayer Compendium</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <div class="logo-area">
+            <span class="flame-icon">&#x1F525;</span>
+            <div>
+              <h1 class="site-title">Demon Slayer</h1>
+              <p class="site-subtitle">Character Compendium</p>
+            </div>
+          </div>
+          <a href="/" class="back-btn" aria-label="Back to all characters">
+            &larr; All Characters
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+      <!-- Loading State -->
+      <div id="loading" class="loading-state" aria-live="polite">
+        <div class="spinner"></div>
+        <p>Loading character profile&hellip;</p>
+      </div>
+
+      <!-- Error State -->
+      <div id="error" class="error-state hidden" role="alert">
+        <p>&#x26A0;&#xFE0F; Character not found. <a href="/">Return to home</a>.</p>
+      </div>
+
+      <!-- Profile Section -->
+      <section id="profile" class="profile-section hidden" aria-live="polite"></section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="container">
+        <p>
+          &copy; 2024 Demon Slayer Compendium &mdash; Fan-made guide. All
+          characters &amp; lore belong to Koyoharu Gotouge.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      const loading = document.getElementById('loading');
+      const errorEl = document.getElementById('error');
+      const profile = document.getElementById('profile');
+
+      function getRankClass(rank) {
+        if (rank.toLowerCase().includes('hashira')) return 'badge-hashira';
+        if (rank.toLowerCase().includes('demon')) return 'badge-demon';
+        return 'badge-slayer';
+      }
+
+      function renderProfile(character) {
+        document.title = `${character.name} | Demon Slayer Compendium`;
+
+        profile.innerHTML = `
+          <div class="profile-card">
+            <div class="profile-image-col">
+              <div class="profile-image-wrap">
+                <img
+                  src="${character.image}"
+                  alt="${character.name}"
+                  class="profile-image"
+                />
+              </div>
+              <span class="rank-badge ${getRankClass(character.rank)} rank-badge-lg">
+                ${character.rank}
+              </span>
+            </div>
+
+            <div class="profile-info-col">
+              <h2 class="profile-name">${character.name}</h2>
+
+              <div class="profile-stats">
+                <div class="stat-row">
+                  <span class="stat-label">Rank</span>
+                  <span class="stat-value">${character.rank}</span>
+                </div>
+                <div class="stat-row">
+                  <span class="stat-label">Breathing Style</span>
+                  <span class="stat-value breathing-tag">${character.breathing}</span>
+                </div>
+              </div>
+
+              <div class="profile-description">
+                <h3 class="desc-heading">&#x1F4DC; Background</h3>
+                <p>${character.description}</p>
+              </div>
+
+              <div class="profile-actions">
+                <a href="/" class="back-home-btn pico-btn">
+                  &larr; Back to All Characters
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      async function loadCharacter() {
+        // Extract slug from pathname: /characters/:slug
+        const pathParts = window.location.pathname.split('/');
+        const slug = pathParts[pathParts.length - 1];
+
+        if (!slug) {
+          loading.classList.add('hidden');
+          errorEl.classList.remove('hidden');
+          return;
+        }
+
+        try {
+          const res = await fetch(`/api/characters/${slug}`);
+          if (!res.ok) throw new Error('Character not found');
+          const character = await res.json();
+
+          loading.classList.add('hidden');
+          profile.classList.remove('hidden');
+          renderProfile(character);
+        } catch (err) {
+          loading.classList.add('hidden');
+          errorEl.classList.remove('hidden');
+          console.error('Failed to fetch character:', err);
+        }
+      }
+
+      loadCharacter();
+    </script>
+  </body>
+</html>

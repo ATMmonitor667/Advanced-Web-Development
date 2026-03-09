@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demon Slayer: Character Compendium</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <div class="logo-area">
+            <span class="flame-icon">&#x1F525;</span>
+            <div>
+              <h1 class="site-title">Demon Slayer</h1>
+              <p class="site-subtitle">Character Compendium</p>
+            </div>
+          </div>
+          <p class="header-tagline">Kimetsu no Yaiba &mdash; Know Your Fighters</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+      <div class="container">
+        <h2 class="hero-title">Meet the Demon Slayers</h2>
+        <p class="hero-desc">
+          Explore the warriors who stand between humanity and the darkness.
+          Each fighter carries a unique breathing style, a personal story, and
+          an unbreakable will.
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+      <!-- Loading State -->
+      <div id="loading" class="loading-state" aria-live="polite">
+        <div class="spinner"></div>
+        <p>Loading characters&hellip;</p>
+      </div>
+
+      <!-- Error State -->
+      <div id="error" class="error-state hidden" role="alert">
+        <p>&#x26A0;&#xFE0F; Failed to load characters. Please refresh the page.</p>
+      </div>
+
+      <!-- Character Grid -->
+      <div id="character-grid" class="character-grid hidden" role="list"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="container">
+        <p>
+          &copy; 2024 Demon Slayer Compendium &mdash; Fan-made guide. All
+          characters &amp; lore belong to Koyoharu Gotouge.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      const grid = document.getElementById('character-grid');
+      const loading = document.getElementById('loading');
+      const errorEl = document.getElementById('error');
+
+      function getRankClass(rank) {
+        if (rank.toLowerCase().includes('hashira')) return 'badge-hashira';
+        if (rank.toLowerCase().includes('demon')) return 'badge-demon';
+        return 'badge-slayer';
+      }
+
+      function createCard(character) {
+        const article = document.createElement('article');
+        article.className = 'character-card';
+        article.setAttribute('role', 'listitem');
+
+        article.innerHTML = `
+          <a href="/characters/${character.slug}" class="card-link" aria-label="View ${character.name} details">
+            <div class="card-image-wrap">
+              <img
+                src="${character.image}"
+                alt="${character.name}"
+                class="card-image"
+                loading="lazy"
+              />
+              <span class="rank-badge ${getRankClass(character.rank)}">${character.rank}</span>
+            </div>
+            <div class="card-body">
+              <h3 class="card-name">${character.name}</h3>
+              <div class="card-meta">
+                <span class="meta-label">Breathing Style</span>
+                <span class="breathing-tag">${character.breathing}</span>
+              </div>
+              <span class="card-cta">View Profile &rarr;</span>
+            </div>
+          </a>
+        `;
+
+        return article;
+      }
+
+      async function loadCharacters() {
+        try {
+          const res = await fetch('/api/characters');
+          if (!res.ok) throw new Error('Network response was not ok');
+          const characters = await res.json();
+
+          loading.classList.add('hidden');
+          grid.classList.remove('hidden');
+
+          characters.forEach((char) => {
+            grid.appendChild(createCard(char));
+          });
+        } catch (err) {
+          loading.classList.add('hidden');
+          errorEl.classList.remove('hidden');
+          console.error('Failed to fetch characters:', err);
+        }
+      }
+
+      loadCharacters();
+    </script>
+  </body>
+</html>
