@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/ATM Rahat Hossain/Desktop/Advanced-Web-Development/game-glitch-investigator/**)",
+      "Bash(python -m pytest tests/ -v)"
+    ]
+  }
+}
