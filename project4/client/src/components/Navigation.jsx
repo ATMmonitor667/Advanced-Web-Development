@@ -14,6 +14,7 @@ const Navigation = () => {
                     <li className="nav-item">
                         <NavLink
                             to="/"
+                            end
                             className={({ isActive }) =>
                                 `nav-link${isActive ? ' active' : ''}`
                             }
