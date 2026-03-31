@@ -1,223 +1,317 @@
-/* CreateCar.css & EditCar.css (shared styles) */
+.builder-page {
+  min-height: calc(100vh - 76px);
+  padding: 2rem 1.5rem 3rem;
+}
 
-.create-car-container {
-  max-width: 1200px;
+.builder-shell {
+  max-width: 1360px;
   margin: 0 auto;
-  padding: 2rem;
 }
 
-.header {
-  text-align: center;
-  margin-bottom: 3rem;
+.builder-heading {
+  margin-bottom: 1.5rem;
 }
 
-.header h1 {
-  font-size: 2.5rem;
-  color: #333;
-  margin-bottom: 0.5rem;
+.builder-eyebrow,
+.feature-label {
+  margin-bottom: 0.45rem;
+  color: #f97316;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
 }
 
-.header p {
-  font-size: 1.1rem;
-  color: #666;
+.builder-heading h1 {
+  max-width: 760px;
+  margin-bottom: 0.8rem;
+  color: #111827;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.02;
+}
+
+.builder-subtitle {
+  max-width: 700px;
+  color: #475569;
+  font-size: 1.08rem;
+  line-height: 1.65;
+}
+
+.builder-message {
+  margin-bottom: 1rem;
 }
 
 .loading {
+  padding: 4rem 1.5rem;
+  color: #475569;
   text-align: center;
-  padding: 3rem;
-  font-size: 1.2rem;
-  color: #666;
+  font-size: 1.1rem;
+}
+
+.error-message,
+.success-message {
+  padding: 1rem 1.1rem;
+  border-radius: 16px;
+  font-weight: 600;
 }
 
 .error-message {
-  background-color: #fee;
-  color: #c33;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  border-left: 4px solid #c33;
+  background: #fff1ef;
+  color: #b42318;
 }
 
 .success-message {
-  background-color: #efe;
-  color: #3c3;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  border-left: 4px solid #3c3;
+  background: #eefbf3;
+  color: #18794e;
 }
 
-.create-car-form {
+.builder-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.builder-sidebar {
+  position: sticky;
+  top: 96px;
+}
+
+.builder-form {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 1.2rem;
+}
+
+.builder-card {
+  padding: 1.35rem;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
+  gap: 0.6rem;
 }
 
 .form-group label {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #333;
-  font-size: 1.1rem;
+  color: #0f172a;
+  font-size: 0.98rem;
+  font-weight: 700;
 }
 
 .form-group input {
-  padding: 0.75rem;
-  border: 2px solid #ddd;
-  border-radius: 8px;
+  width: 100%;
+  padding: 0.95rem 1rem;
+  border: 1px solid #cdd5e1;
+  border-radius: 16px;
+  color: #0f172a;
   font-size: 1rem;
-  transition: border-color 0.3s;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #4a90e2;
+  border-color: #fb923c;
+  box-shadow: 0 0 0 4px rgba(251, 146, 60, 0.16);
 }
 
-.features-grid {
+.feature-card {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 1rem;
 }
 
-.feature-section {
-  background: #f8f9fa;
-  padding: 2rem;
-  border-radius: 12px;
+.feature-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
-.feature-section h2 {
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
-  color: #333;
-  border-bottom: 2px solid #ddd;
-  padding-bottom: 0.5rem;
+.feature-card-header h2 {
+  color: #111827;
+  font-size: 1.4rem;
+}
+
+.feature-hint {
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  background: #fff1e6;
+  color: #9a3412;
+  font-size: 0.84rem;
+  font-weight: 700;
 }
 
 .options-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.95rem;
 }
 
 .option-card {
-  background: white;
-  border: 3px solid #ddd;
-  border-radius: 12px;
-  padding: 1.5rem;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
+  align-items: flex-start;
+  gap: 0.45rem;
+  padding: 1rem;
+  border: 1px solid #d7dfeb;
+  border-radius: 20px;
+  background: #f8fafc;
+  color: #111827;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
-.option-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  border-color: #4a90e2;
+.option-card:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: #fb923c;
+  box-shadow: 0 10px 22px rgba(251, 146, 60, 0.12);
 }
 
 .option-card.selected {
-  border-color: #4a90e2;
-  background: #e8f4fd;
-  box-shadow: 0 4px 8px rgba(74, 144, 226, 0.2);
+  border-color: #f97316;
+  background: linear-gradient(180deg, #fff7ed 0%, #ffffff 100%);
+  box-shadow: 0 14px 28px rgba(249, 115, 22, 0.14);
 }
 
-.option-card i {
-  font-size: 2.5rem;
-  color: #4a90e2;
+.option-card.disabled {
+  opacity: 0.64;
+  cursor: not-allowed;
+}
+
+.option-card-feature {
+  color: #64748b;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
 }
 
 .option-card h3 {
-  font-size: 1.1rem;
-  color: #333;
-  margin: 0;
+  font-size: 1.05rem;
 }
 
-.option-card .price {
-  font-weight: 600;
-  color: #2ecc71;
-  font-size: 1.2rem;
-  margin: 0;
+.option-price {
+  color: #c2410c;
+  font-weight: 700;
 }
 
-.total-price-section {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 2rem;
-  border-radius: 12px;
-  text-align: center;
+.option-status {
+  color: #475569;
+  font-size: 0.86rem;
 }
 
-.total-price-section h2 {
-  font-size: 2rem;
-  margin: 0;
-}
-
-.form-actions {
+.builder-total {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 1rem;
-  justify-content: center;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+.builder-total h2 {
+  color: #ffffff;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+}
+
+.builder-total .feature-label {
+  color: #fdba74;
+}
+
+.builder-actions {
+  display: flex;
+  gap: 0.85rem;
+  flex-wrap: wrap;
 }
 
 .btn-primary,
-.btn-secondary {
-  padding: 0.75rem 2rem;
-  font-size: 1.1rem;
+.btn-secondary,
+.btn-edit,
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.85rem 1.3rem;
   border: none;
-  border-radius: 8px;
+  border-radius: 16px;
+  font-weight: 700;
+  text-decoration: none;
   cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
 
 .btn-primary {
-  background: #4a90e2;
-  color: white;
+  background: #f97316;
+  color: #fff7ed;
 }
 
 .btn-primary:hover {
-  background: #357abd;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 22px rgba(249, 115, 22, 0.24);
 }
 
 .btn-secondary {
-  background: #6c757d;
-  color: white;
+  background: #e2e8f0;
+  color: #1e293b;
 }
 
 .btn-secondary:hover {
-  background: #5a6268;
-  transform: translateY(-2px);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 22px rgba(148, 163, 184, 0.24);
+}
+
+.btn-edit {
+  background: #0f766e;
+  color: #f0fdfa;
+}
+
+.btn-edit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 22px rgba(15, 118, 110, 0.22);
+}
+
+.btn-danger {
+  background: #be123c;
+  color: #fff1f2;
+}
+
+.btn-danger:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 22px rgba(190, 18, 60, 0.22);
+}
+
+@media (max-width: 1080px) {
+  .builder-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .builder-sidebar {
+    position: static;
+  }
 }
 
 @media (max-width: 768px) {
-  .create-car-container {
-    padding: 1rem;
+  .builder-page {
+    padding-inline: 1rem;
   }
 
-  .header h1 {
-    font-size: 2rem;
-  }
-
-  .options-grid {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  }
-
-  .form-actions {
+  .feature-card-header,
+  .builder-total {
     flex-direction: column;
+    align-items: flex-start;
   }
 
-  .btn-primary,
-  .btn-secondary {
+  .builder-actions {
+    width: 100%;
+  }
+
+  .builder-actions .btn-primary,
+  .builder-actions .btn-secondary {
     width: 100%;
   }
 }

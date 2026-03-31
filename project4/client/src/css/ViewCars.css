@@ -1,174 +1,147 @@
-/* ViewCars.css */
+.garage-page {
+  padding: 2rem 1.5rem 3rem;
+}
 
-.view-cars-container {
-  max-width: 1400px;
+.garage-shell {
+  max-width: 1360px;
   margin: 0 auto;
-  padding: 2rem;
 }
 
-.view-cars-container .header {
-  text-align: center;
-  margin-bottom: 3rem;
-  position: relative;
-}
-
-.view-cars-container .header h1 {
-  font-size: 2.5rem;
-  color: #333;
-  margin-bottom: 0.5rem;
-}
-
-.view-cars-container .header p {
-  font-size: 1.1rem;
-  color: #666;
+.garage-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
   margin-bottom: 1.5rem;
 }
 
-.view-cars-container .header .btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 2rem;
-  background: #4a90e2;
-  color: white;
-  text-decoration: none;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 0.3s;
+.garage-eyebrow,
+.garage-card-label {
+  margin-bottom: 0.45rem;
+  color: #f97316;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
 }
 
-.view-cars-container .header .btn-primary:hover {
-  background: #357abd;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+.garage-header h1 {
+  margin-bottom: 0.65rem;
+  color: #111827;
+  font-size: clamp(2rem, 4vw, 3.25rem);
 }
 
-.empty-state {
+.garage-header p {
+  max-width: 720px;
+  color: #475569;
+  line-height: 1.65;
+}
+
+.garage-empty {
+  padding: 3rem 2rem;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
   text-align: center;
-  padding: 4rem 2rem;
-  background: #f8f9fa;
-  border-radius: 12px;
 }
 
-.empty-state i {
-  font-size: 4rem;
-  color: #ccc;
-  margin-bottom: 1rem;
+.garage-empty h2 {
+  margin-bottom: 0.65rem;
+  color: #111827;
 }
 
-.empty-state h2 {
-  font-size: 1.8rem;
-  color: #666;
-  margin-bottom: 0.5rem;
+.garage-empty p {
+  margin-bottom: 1.5rem;
+  color: #475569;
 }
 
-.empty-state p {
-  color: #999;
-  margin-bottom: 2rem;
-}
-
-.cars-grid {
+.garage-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.3rem;
 }
 
-.car-card {
-  background: white;
-  border: 2px solid #e0e0e0;
-  border-radius: 12px;
-  padding: 1.5rem;
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.3s ease;
+.garage-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+}
+
+.garage-card-body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.car-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-  border-color: #4a90e2;
-}
-
-.car-card-header {
+.garage-card-heading {
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
-  align-items: center;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid #f0f0f0;
-}
-
-.car-card-header h3 {
-  font-size: 1.4rem;
-  color: #333;
-  margin: 0;
-}
-
-.price-badge {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 1.1rem;
-}
-
-.car-features {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 }
 
-.feature-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  background: #f8f9fa;
-  border-radius: 8px;
+.garage-card-heading h2 {
+  color: #0f172a;
+  font-size: 1.35rem;
 }
 
-.feature-item i {
-  font-size: 1.5rem;
-  color: #4a90e2;
-}
-
-.feature-item small {
-  display: block;
-  color: #999;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.feature-item p {
-  margin: 0;
+.garage-card-date {
+  color: #64748b;
+  font-size: 0.88rem;
   font-weight: 600;
-  color: #333;
+}
+
+.garage-selection-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.garage-selection-item {
+  padding: 0.85rem;
+  border-radius: 18px;
+  background: #f8fafc;
+}
+
+.garage-selection-item span {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: #64748b;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.garage-selection-item strong {
+  color: #111827;
   font-size: 0.95rem;
 }
 
-.car-card-footer {
-  padding-top: 1rem;
-  border-top: 2px solid #f0f0f0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.garage-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
 }
 
-.car-card-footer .date {
-  color: #999;
-  font-size: 0.9rem;
+@media (max-width: 920px) {
+  .garage-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
-@media (max-width: 768px) {
-  .cars-grid {
-    grid-template-columns: 1fr;
+@media (max-width: 640px) {
+  .garage-page {
+    padding-inline: 1rem;
   }
 
-  .car-features {
+  .garage-selection-grid,
+  .garage-actions {
     grid-template-columns: 1fr;
   }
 }

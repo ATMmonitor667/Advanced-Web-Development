@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import CarPreview from '../components/CarPreview'
 import CarsAPI from '../services/CarsAPI'
 import OptionsAPI from '../services/OptionsAPI'
 import { calculateTotalPrice, formatPrice } from '../utilities/priceCalculator'
+import { buildSelectionsFromForm, featureNames } from '../utilities/carAppearance'
 import { validateSelections, validateCarName } from '../utilities/validation'
 import '../css/CreateCar.css'
 
@@ -18,170 +20,250 @@ const EditCar = ({ title }) => {
     const [successMessage, setSuccessMessage] = useState('')
 
     useEffect(() => {
-        document.title = title || 'Edit Car'
+        document.title = title || 'Bolt Bucket | Edit'
         loadData()
     }, [id, title])
 
     useEffect(() => {
-        calculatePrice()
+        const selectedOptions = Object.values(selections).filter(Boolean)
+        setTotalPrice(calculateTotalPrice(selectedOptions))
     }, [selections])
 
     const loadData = async () => {
         try {
             const [featuresData, carData] = await Promise.all([
                 OptionsAPI.getAllFeaturesWithOptions(),
-                CarsAPI.getCarById(id)
+                CarsAPI.getCarById(id),
             ])
 
-            setFeatures(featuresData)
-            setCarName(carData.name)
+            const nextSelections = {}
+            const validSelections = carData.selections?.filter((selection) => selection.option_id) || []
 
-            // Convert car selections to state format
-            const selectionsMap = {}
-            const validSelections = carData.selections?.filter(s => s.option_id !== null) || []
+            validSelections.forEach((selection) => {
+                const feature = featuresData.find(
+                    (item) => item.feature_id === selection.feature_id
+                )
+                const option = feature?.options.find(
+                    (item) => item.id === selection.option_id
+                )
 
-            validSelections.forEach(selection => {
-                const feature = featuresData.find(f => f.feature_id === selection.feature_id)
-                if (feature) {
-                    const option = feature.options.find(o => o.id === selection.option_id)
-                    if (option) {
-                        selectionsMap[selection.feature_id] = option
-                    }
+                if (feature && option) {
+                    nextSelections[feature.feature_id] = option
                 }
             })
 
-            setSelections(selectionsMap)
-            setLoading(false)
-        } catch (error) {
-            setError('Failed to load car details')
+            setFeatures(featuresData)
+            setCarName(carData.name)
+            setSelections(nextSelections)
+        } catch (loadError) {
+            setError('Failed to load the saved build.')
+        } finally {
             setLoading(false)
         }
     }
 
-    const calculatePrice = () => {
-        const selectedOptions = Object.values(selections).filter(Boolean)
-        const price = calculateTotalPrice(selectedOptions)
-        setTotalPrice(price)
+    const currentSelections = buildSelectionsFromForm(features, selections)
+
+    const getSelectedOptionName = (featureName) => {
+        const feature = features.find((item) => item.feature_name === featureName)
+        return feature ? selections[feature.feature_id]?.name || '' : ''
     }
 
-    const handleOptionSelect = (featureId, option) => {
-        setSelections(prev => ({
+    const isOptionDisabled = (featureName, optionName) => {
+        const selectedEngine = getSelectedOptionName(featureNames.engine)
+        const selectedWheels = getSelectedOptionName(featureNames.wheels)
+
+        return (
+            (featureName === featureNames.wheels &&
+                optionName === 'Sport' &&
+                selectedEngine === 'Electric') ||
+            (featureName === featureNames.engine &&
+                optionName === 'Electric' &&
+                selectedWheels === 'Sport')
+        )
+    }
+
+    const getOptionStatus = (featureName, optionName) => {
+        if (!isOptionDisabled(featureName, optionName)) {
+            return ''
+        }
+
+        if (featureName === featureNames.wheels) {
+            return 'Unavailable with Electric drive'
+        }
+
+        return 'Unavailable with Sport wheels'
+    }
+
+    const handleOptionSelect = (feature, option) => {
+        if (isOptionDisabled(feature.feature_name, option.name)) {
+            return
+        }
+
+        setSelections((prev) => ({
             ...prev,
-            [featureId]: option
+            [feature.feature_id]: option,
         }))
         setError('')
     }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
+    const handleSubmit = async (event) => {
+        event.preventDefault()
         setError('')
         setSuccessMessage('')
 
-        // Validate car name
         const nameValidation = validateCarName(carName)
         if (!nameValidation.isValid) {
             setError(nameValidation.error)
             return
         }
 
-        // Convert selections to array
-        const selectionsArray = Object.entries(selections).map(([featureId, option]) => ({
-            feature_id: parseInt(featureId),
-            option_id: option.id,
-            price: option.price
+        const selectionsArray = currentSelections.map((selection) => ({
+            feature_id: selection.feature_id,
+            option_id: selection.option_id,
+            price: selection.option_price,
         }))
 
-        // Validate selections
         const validation = validateSelections(selectionsArray)
         if (!validation.isValid) {
-            setError(validation.errors.join('. '))
+            setError(validation.errors.join(' '))
             return
         }
 
         try {
-            const carData = {
-                name: carName,
+            await CarsAPI.updateCar(id, {
+                name: carName.trim(),
                 selections: selectionsArray,
-                total_price: totalPrice
-            }
+                total_price: totalPrice,
+            })
 
-            await CarsAPI.updateCar(id, carData)
-            setSuccessMessage('Car updated successfully!')
+            setSuccessMessage('Custom car updated successfully.')
 
-            // Navigate back after short delay
             setTimeout(() => {
                 navigate(`/customcars/${id}`)
-            }, 1500)
-        } catch (error) {
-            setError(error.message || 'Failed to update car')
+            }, 900)
+        } catch (submitError) {
+            setError(submitError.message || 'Failed to update custom car.')
         }
     }
 
     if (loading) {
-        return <div className="loading">Loading...</div>
+        return <div className="loading">Loading saved build...</div>
     }
 
     return (
-        <div className="create-car-container">
-            <div className="header">
-                <h1>✏️ Edit Custom Car</h1>
-                <p>Update your car configuration</p>
-            </div>
-
-            {error && <div className="error-message">{error}</div>}
-            {successMessage && <div className="success-message">{successMessage}</div>}
-
-            <form onSubmit={handleSubmit} className="create-car-form">
-                <div className="form-group">
-                    <label htmlFor="carName">Car Name *</label>
-                    <input
-                        type="text"
-                        id="carName"
-                        value={carName}
-                        onChange={(e) => setCarName(e.target.value)}
-                        placeholder="Enter a name for your custom car"
-                        required
-                    />
+        <div className="builder-page">
+            <div className="builder-shell">
+                <div className="builder-heading">
+                    <div>
+                        <p className="builder-eyebrow">Edit Saved Build</p>
+                        <h1>Fine-tune your custom car before you lock it in.</h1>
+                        <p className="builder-subtitle">
+                            Update the name, swap parts, and save the refreshed build back
+                            to your garage.
+                        </p>
+                    </div>
                 </div>
 
-                <div className="features-grid">
-                    {features.map(feature => (
-                        <div key={feature.feature_id} className="feature-section">
-                            <h2>{feature.feature_name}</h2>
-                            <div className="options-grid">
-                                {feature.options.map(option => (
-                                    <div
-                                        key={option.id}
-                                        className={`option-card ${selections[feature.feature_id]?.id === option.id ? 'selected' : ''}`}
-                                        onClick={() => handleOptionSelect(feature.feature_id, option)}
-                                    >
-                                        <i className={option.icon_class || 'fa-solid fa-circle'}></i>
-                                        <h3>{option.name}</h3>
-                                        <p className="price">{formatPrice(option.price)}</p>
-                                    </div>
-                                ))}
+                {error && <div className="builder-message error-message">{error}</div>}
+                {successMessage && (
+                    <div className="builder-message success-message">{successMessage}</div>
+                )}
+
+                <div className="builder-layout">
+                    <aside className="builder-sidebar">
+                        <CarPreview selections={currentSelections} totalPrice={totalPrice} />
+                    </aside>
+
+                    <form onSubmit={handleSubmit} className="builder-form">
+                        <section className="builder-card">
+                            <div className="form-group">
+                                <label htmlFor="carName">Build Name</label>
+                                <input
+                                    type="text"
+                                    id="carName"
+                                    value={carName}
+                                    onChange={(event) => setCarName(event.target.value)}
+                                    placeholder="Example: Canyon Runner"
+                                    maxLength={50}
+                                    required
+                                />
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        </section>
 
-                <div className="total-price-section">
-                    <h2>Total Price: {formatPrice(totalPrice)}</h2>
-                </div>
+                        {features.map((feature) => (
+                            <section key={feature.feature_id} className="builder-card feature-card">
+                                <div className="feature-card-header">
+                                    <div>
+                                        <p className="feature-label">{feature.feature_name}</p>
+                                        <h2>Adjust your {feature.feature_name.toLowerCase()}</h2>
+                                    </div>
+                                    <span className="feature-hint">Choose one option</span>
+                                </div>
 
-                <div className="form-actions">
-                    <button type="submit" className="btn-primary">
-                        Update Car
-                    </button>
-                    <button
-                        type="button"
-                        className="btn-secondary"
-                        onClick={() => navigate(`/customcars/${id}`)}
-                    >
-                        Cancel
-                    </button>
+                                <div className="options-grid">
+                                    {feature.options.map((option) => {
+                                        const selected =
+                                            selections[feature.feature_id]?.id === option.id
+                                        const disabled =
+                                            isOptionDisabled(feature.feature_name, option.name) &&
+                                            !selected
+
+                                        return (
+                                            <button
+                                                key={option.id}
+                                                type="button"
+                                                className={`option-card${selected ? ' selected' : ''}${disabled ? ' disabled' : ''}`}
+                                                onClick={() => handleOptionSelect(feature, option)}
+                                                disabled={disabled}
+                                                aria-pressed={selected}
+                                            >
+                                                <span className="option-card-feature">
+                                                    {feature.feature_name}
+                                                </span>
+                                                <h3>{option.name}</h3>
+                                                <p className="option-price">
+                                                    {option.price === 0
+                                                        ? 'Included'
+                                                        : `+${formatPrice(option.price)}`}
+                                                </p>
+                                                <span className="option-status">
+                                                    {selected
+                                                        ? 'Selected'
+                                                        : getOptionStatus(
+                                                              feature.feature_name,
+                                                              option.name
+                                                          ) || 'Available'}
+                                                </span>
+                                            </button>
+                                        )
+                                    })}
+                                </div>
+                            </section>
+                        ))}
+
+                        <section className="builder-card builder-total">
+                            <div>
+                                <p className="feature-label">Updated Total</p>
+                                <h2>{formatPrice(totalPrice)}</h2>
+                            </div>
+
+                            <div className="builder-actions">
+                                <button type="submit" className="btn-primary">
+                                    Save Changes
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn-secondary"
+                                    onClick={() => navigate(`/customcars/${id}`)}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </section>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     )
 }
