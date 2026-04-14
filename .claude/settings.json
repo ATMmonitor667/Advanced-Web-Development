@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \"c:/Users/ATM Rahat Hossain/Desktop/Advanced-Web-Development/music-recommender/recommender\")",
+      "Bash(mkdir -p \"c:/Users/ATM Rahat Hossain/Desktop/Advanced-Web-Development/music-recommender/data\")",
+      "Bash(mkdir -p \"c:/Users/ATM Rahat Hossain/Desktop/Advanced-Web-Development/music-recommender/tests\")",
+      "Bash(python -m pytest tests/ -v --tb=short)"
+    ]
+  }
+}
